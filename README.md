@@ -225,7 +225,20 @@ http{
         return 410;
 
         }
-    }
+    }events{}
+
+
+
+
+
+http { 
+server { 
+	listen 80; 
+	server_name localhost; 
+	add_header X-Served-By "nginxs2"; 
+	location / { 
+		root /usr/share/nginx/html;
+} 
 }
 }
 
@@ -236,13 +249,28 @@ http{
 
 
 
-http {
-    server {
-        listen 80;
-        server_name example.com;
-        add_header X-Served-By "Nginx";
-        location / {
-            proxy_pass http://localhost:8080;
-        }
-    }
+events{}
+http { 
+
+upstream lb{
+	least_conn;
+	server localhost:8888;
+	server localhost:8889;
+	proxy_next_upstream timeout=4s error timeout invalid_header http_500 http_502 http_503 http_504 http_404;
+	max_fails=10;
+	fail_timeout=10s;
 }
+
+server { 
+	listen 80; 
+	server_name localhost; 
+	add_header X-Served-By $hostname; 
+	location / { 
+		root /usr/share/nginx/html;
+		proxy_pass http://lb;
+	}
+
+}
+}
+
+
