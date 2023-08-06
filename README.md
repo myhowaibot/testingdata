@@ -42,3 +42,120 @@ Replace http://example.com with your website URL. This will show you the HTTP he
 Alternatively, you can use your web browser’s developer tools to inspect the HTTP headers returned by the server.
 
 I hope this helps! Let me know if you have any other questions.
+
+
+
+
+
+
+
+
+
+
+
+
+To configure a probe in Nginx load balancer, you can use the `health_check` directive. Here is an example configuration:
+
+```
+http {
+    upstream backend {
+        server backend1.example.com;
+        server backend2.example.com;
+
+        # Configure health check for the upstream servers
+        health_check interval=5s timeout=3s type=http;
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
+```
+
+In this example, the `health_check` directive is used to configure a health check for the upstream servers. The `interval` parameter specifies how often the health check should be performed, and the `timeout` parameter specifies how long to wait for a response before considering the server as down. The `type` parameter specifies the type of health check to perform. In this case, it is an HTTP health check¹.
+
+I hope that helps. Let me know if you have any other questions.
+
+Source: Conversation with Bing, 8/6/2023
+(1) Using nginx as HTTP load balancer. https://nginx.org/en/docs/http/load_balancing.html.
+(2) Manage health probes for Azure Load Balancer - Azure portal. https://learn.microsoft.com/en-us/azure/load-balancer/manage-probes-how-to.
+(3) How to setup an Nginx load balancer example - TheServerSide. https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-to-setup-an-Nginx-load-balancer-example.
+(4) How To Configure Nginx as a Load Balancer - DEV Community. https://dev.to/iankumu/how-to-configure-nginx-as-a-load-balancer-2ag3.
+(5) How to configure load balancing using Nginx - UpCloud. https://upcloud.com/resources/tutorials/configure-load-balancing-nginx.
+
+
+
+
+
+
+
+
+
+To set the time that a node needs to respond in Nginx load balancer, you can use the `timeout` parameter in the `health_check` directive. The `timeout` parameter specifies how long to wait for a response before considering the server as down. Here is an example configuration:
+
+```
+http {
+    upstream backend {
+        server backend1.example.com;
+        server backend2.example.com;
+
+        # Configure health check for the upstream servers
+        health_check interval=5s timeout=10s type=http;
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
+```
+
+In this example, the `timeout` parameter is set to 10 seconds. This means that if a server does not respond within 10 seconds, it will be considered down¹.
+
+I hope that helps. Let me know if you have any other questions.
+
+Source: Conversation with Bing, 8/6/2023
+(1) Load Balancing Node.js Application Servers with NGINX Open Source and .... https://docs.nginx.com/nginx/deployment-guides/load-balance-third-party/node-js/.
+(2) HTTP Load Balancing | NGINX Documentation. https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/.
+(3) Using Nginx as load balancer and random requests hang for a while, then .... https://superuser.com/questions/1706823/using-nginx-as-load-balancer-and-random-requests-hang-for-a-while-then-throughp.
+(4) How To Set Up Nginx Load Balancing | DigitalOcean. https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-load-balancing.
+
+
+
+
+
+
+
+
+سلام، شما می‌توانید یک لود بالانسر با nginx با این تنظیمات بسازید:
+
+```
+http {
+    upstream backend {
+        server backend1.example.com;
+        server backend2.example.com;
+
+        # Configure health check for the upstream servers
+        health_check interval=5s timeout=4s fails=10 type=http;
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
+```
+
+در این تنظیمات، پورت لود بالانسر روی ۸۰ تنظیم شده است. مدت زمانی که برای پاسخ هر probe می‌توان صبر کرد، ۴ ثانیه و تعداد دفعاتی که الزم است یک target پاسخ صحیح دهد تا به عنوان نود سالم لحاظ شود، ۱۰ بار تنظیم شده است.
+
+امیدوارم که این پاسخ به شما کمک کند. در صورت داشتن هرگونه سوال دیگر، منتظر پاسخ شما هستم.
