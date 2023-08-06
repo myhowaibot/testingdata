@@ -207,3 +207,21 @@ http{
     }
 }
 }
+
+
+
+
+
+
+
+
+http {
+    server {
+        listen 80;
+        server_name example.com;
+        add_header X-Served-By "Nginx";
+        location / {
+            proxy_pass http://localhost:8080;
+        }
+    }
+}
