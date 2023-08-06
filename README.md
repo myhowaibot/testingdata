@@ -1,3 +1,24 @@
+http {
+    upstream backend {
+        server backend1.example.com;
+        server backend2.example.com;
+
+        # Configure health check for the upstream servers
+        proxy_next_upstream timeout=4s error timeout invalid_header http_500 http_502 http_503 http_504 http_404;
+
+        # Configure number of times that a target needs to answer to be a healthy node
+        max_fails=10;
+        fail_timeout=10s;
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
 
 
 
