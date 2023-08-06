@@ -159,3 +159,51 @@ http {
 در این تنظیمات، پورت لود بالانسر روی ۸۰ تنظیم شده است. مدت زمانی که برای پاسخ هر probe می‌توان صبر کرد، ۴ ثانیه و تعداد دفعاتی که الزم است یک target پاسخ صحیح دهد تا به عنوان نود سالم لحاظ شود، ۱۰ بار تنظیم شده است.
 
 امیدوارم که این پاسخ به شما کمک کند. در صورت داشتن هرگونه سوال دیگر، منتظر پاسخ شما هستم.
+
+
+
+
+
+
+
+
+
+events{}
+http{
+ server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    location / {
+        root /usr/share/nginx/html/;
+        secure_link $arg_md5,$arg_expires;
+        secure_link_md5 "$secure_link_expires$uri strong";
+        add_header Content-Disposition "attachment";
+        add_header Content-Type "application/octet-stream";
+
+   if ($secure_link = "")  {
+
+        return 403;
+
+        }
+
+   if ($secure_link = "0") {
+
+        return 410;
+
+        }
+    }
+     if ($secure_link = "")  {
+
+        return 403;
+
+        }
+
+   if ($secure_link = "0") {
+
+        return 410;
+
+        }
+    }
+}
+}
